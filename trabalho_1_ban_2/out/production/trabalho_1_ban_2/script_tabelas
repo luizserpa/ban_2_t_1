@@ -1,0 +1,53 @@
+CREATE TABLE motorista (
+    cod_mot int NOT NULL PRIMARY KEY,
+    nome varchar(70) NOT NULL,
+    cnh varchar(70) NOT NULL,
+    data_desat int
+);
+
+CREATE TABLE marca (
+    cod_marca int NOT NULL PRIMARY KEY,
+    nome varchar(70) NOT NULL,
+    data_desat int
+);
+
+CREATE TABLE modelo (
+    cod_modelo int NOT NULL PRIMARY KEY,
+    cod_marca int, FOREIGN KEY(cod_marca) REFERENCES marca(cod_marca),
+    nome varchar(70) NOT NULL,
+    combustivel varchar(1) NOT NULL,
+    motor real NOT NULL,
+    data_desat int
+);
+
+CREATE TABLE veiculo (
+    cod_veiculo int NOT NULL PRIMARY KEY,
+    chassi varchar(100) NOT NULL,
+    cod_modelo int, FOREIGN KEY(cod_modelo) REFERENCES modelo(cod_modelo),
+    placa VARCHAR(7) NOT NULL,
+    uf VARCHAR(2) NOT NULL,
+    data_desat int
+);
+
+CREATE TABLE deslocamento (
+    cod_des int NOT NULL PRIMARY KEY,
+    cod_veiculo int, FOREIGN KEY(cod_veiculo) REFERENCES veiculo(cod_veiculo),
+    cod_mot int, FOREIGN KEY(cod_mot) REFERENCES motorista(cod_mot),
+    descricao VARCHAR(250) NOT NULL,
+    status_des VARCHAR(2) NOT NULL
+);
+
+CREATE TABLE passagem_deslocamento (
+    cod_des int NOT NULL, FOREIGN KEY(cod_des) REFERENCES deslocamento(cod_des),
+    seq int NOT NULL,
+    PRIMARY KEY(cod_des, seq),
+    tipo_des VARCHAR(2) NOT NULL
+);
+
+CREATE TABLE incidente(
+    cod_des int NOT NULL, FOREIGN KEY(cod_des) REFERENCES deslocamento(cod_des),
+    cod_inc int NOT NULL,
+    PRIMARY KEY(cod_des, cod_inc),
+    tipo_inc VARCHAR(2) NOT NULL,
+    descricao VARCHAR(250) NOT NULL
+);
